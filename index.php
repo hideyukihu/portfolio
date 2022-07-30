@@ -1,24 +1,37 @@
-<?php  
+<!DOCTYPE html>
+<html lang="en">
 
-$dsn = 'mysql:dbname=test_phpdb; port=8889; host=localhost; charset=utf8';
-$usr = 'root';
-$passwd = 'root';
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
 
-try {
-  $db = new PDO($dsn, $usr, $passwd);
-  print '接続に成功しました';
-  $db->setAttribute(pdo::ATTR_DEFAULT_FETCH_MODE, pdo::FETCH_ASSOC);
-  $pst = $db->query('update mst_prefs set name = "新潟" where id = 5');
-  $result = $pst->fetchAll();
-  echo '<pre>';
-  var_dump($result);
-  echo '</pre>';
-} catch (PDOException $e){
-  die("接続エラー：{$e->getMessage()}");
-} finally {
+<body>
+  <form action="" method="POST">
+    <div>
+      <label for="text">text</label>
+      <input type="text" id="text" name="text">
+    </div>
+    <div><input type="submit"></div>
+  </form>
+</body>
+
+</html>
+
+</html>
+
+
+<?php
+require_once './DbManeger.php';
+
+$db = getDB();
+$db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+$stmt = $db->prepare("insert into todo.do(text, created_at, updated_at) values(:text, now(), now());");
+if(!empty($_POST) && $_POST['text'] === '') {
+  $stmt->bindValue(':text', $_POST['text']);
+  $stmt->execute();
 }
 
-print_r(PDO::FETCH_ASSOC);
-
-
-
+?>
