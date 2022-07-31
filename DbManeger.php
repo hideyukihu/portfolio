@@ -14,3 +14,34 @@ function getDB()
   } finally {
   }
 }
+
+function fetchALL() {
+  $sql = "select * from do";
+  $query = getDB()->query($sql);
+  return $query->fetchALL(PDO::FETCH_ASSOC);
+}
+
+function create($text) {
+  $now = date('Y/m/d H:i:s');
+  $sql = "insert into todo.do (text, created_at, updated_at) values(?, ?, ?);";
+  $stmt = getDB()->prepare($sql);
+  $stmt->execute([$text, $now, $now]);
+}
+
+function update($id, $text)
+{
+    $sql = 'UPDATE todo SET text = ?, updated_at = ? WHERE do.id = ?';
+
+    $stmt = getDB()->prepare($sql);
+
+    $stmt->execute([$text, date('Y/m/d H:i:s'), $id]);
+}
+
+function delete($id)
+{
+    $sql = 'delete from do WHERE do.id = ?';
+    $stmt = getdb()->prepare($sql);
+
+    $stmt->execute([$id]);
+}
+
